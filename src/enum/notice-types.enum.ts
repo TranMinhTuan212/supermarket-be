@@ -1,0 +1,7 @@
+/* eslint-disable prettier/prettier */
+export enum NOTICE_TYPES {
+    CONFIRMED_ORDER = 'CONFIRMED_ORDER',
+    CANCELLED_ORDER = 'CANCELLED_ORDER',
+    COMPLETE_ORDER = 'COMPLETE_ORDER',
+    APPROVED = 'APPROVED'
+}

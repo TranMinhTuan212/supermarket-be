@@ -1,0 +1,15 @@
+{
+  "collection": "@nestjs/schematics",
+  "sourceRoot": "src",
+  "compilerOptions": {
+    "plugins": ["@nestjs/swagger/plugin"],
+    "assets": [
+      "**/*.css",
+      "**/*.jpg",
+      "**/*.hbs",
+      "**/*.png",
+      "**/*.html",
+      { "include": "email/templates/", "watchAssets": true }
+    ]
+  }
+}
