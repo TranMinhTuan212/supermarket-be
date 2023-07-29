@@ -6,6 +6,7 @@
 # Bỏ qua thư mục "build" và "dist"
 /build/
 /dist/
+/node_modules/
 
 # Bỏ qua tệp "config.yaml" trong thư mục gốc
 /config.yaml
