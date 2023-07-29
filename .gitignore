@@ -1,0 +1,14 @@
+# Đây là một comment trong tệp .gitignore
+
+# Bỏ qua tất cả các tệp có phần mở rộng .log
+*.log
+
+# Bỏ qua thư mục "build" và "dist"
+/build/
+/dist/
+
+# Bỏ qua tệp "config.yaml" trong thư mục gốc
+/config.yaml
+
+# Bỏ qua tất cả các tệp hoặc thư mục bắt đầu bằng "temp_"
+temp_*
