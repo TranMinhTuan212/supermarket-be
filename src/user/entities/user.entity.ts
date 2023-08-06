@@ -44,6 +44,9 @@ export class User
     @OneToMany(()=>Product, product=>product.user)
     products: Product
 
+    @OneToMany(()=>Product, product=>product.user)
+    product: Product
+
     // @OneToMany(()=>Notice, notice => notice.user)
     // notices: Notice[]
 

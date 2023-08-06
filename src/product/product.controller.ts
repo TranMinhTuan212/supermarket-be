@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Body, Post, UseInterceptors, UploadedFile, Get, Param, UseGuards, Query, Put, ValidationPipe } from '@nestjs/common';
+import { Body, Post, UseInterceptors, UploadedFile, Get, Param, UseGuards, Query, Put, ValidationPipe, Delete } from '@nestjs/common';
 import { Controller } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { ProductService } from './product.service';
@@ -14,6 +14,7 @@ import { User } from 'src/user/entities/user.entity';
 import { GetListProductDto } from './dto/get-list-product.dto';
 import { Auth } from 'src/guards/auth.guard';
 import { ApproveDto } from './dto/approve.dto';
+import { AddCartDto } from './dto/add- cart.dto';
 
 @Controller('/product')
 @ApiTags('Product')
@@ -23,6 +24,7 @@ export class ProductController {
     private readonly connection: Connection
     ) {}
 
+    // create product
   @Post('create-product')
   @ApiResponse({
     status: 500,
@@ -60,6 +62,7 @@ export class ProductController {
     })
   }
 
+  // get list product
   @Get()
   @ApiResponse({
     status: 200,
@@ -82,6 +85,7 @@ export class ProductController {
     return await this.productService.getListProduct(getListProductDto)
   }
 
+  // get product by id
   @Get('detail/:id')
   @ApiResponse({
     status: 200,
@@ -102,7 +106,7 @@ export class ProductController {
       return await this.productService.getProductById(id)
   }
 
-
+    // approve product
   @Put('approve-product')
   @ApiResponse({
     status: 200,
@@ -121,6 +125,54 @@ export class ProductController {
     @Body(ValidationPipe) approveDto: ApproveDto
   ){
       return await this.productService.approveProduct(user, approveDto)
+  }
+
+  // add product to cart
+  @Post('add-cart')
+  @ApiResponse({
+    status: 200,
+    description: 'Thêm sản phẩm vào giỏ hàng thành công'
+  })
+  @ApiResponse({
+    status: 500,
+    description: 'Thêm sản phẩm vào giỏ hàng thất bại'
+  })
+  @UseGuards(Auth)
+  @ApiBearerAuth()
+  async addCart(@GetUser() user: User, @Body(ValidationPipe) addCartDto: AddCartDto){
+    return await this.productService.addCart(user, addCartDto)
+  }
+
+  // get list product of cart
+  @Get('get-cart')
+  @ApiResponse({
+    status: 200,
+    description: 'Lấy danh sách giỏ hàng thành công'
+  })
+  @ApiResponse({
+    status: 500,
+    description: 'Lấy danh sách giỏ hàng thất bại'
+  })
+  @UseGuards(Auth)
+  @ApiBearerAuth()
+  async getCart(@GetUser() user: User, @Query() getListProductDto: GetListProductDto){
+    return await this.productService.getCart(user, getListProductDto)
+  }
+
+  // delete product of cart
+  @Delete('delete-cart/:id')
+  @ApiResponse({
+    status: 200,
+    description: 'Xóa sản phẩm trong giỏ hàng thành công'
+  })
+  @ApiResponse({
+    status: 500,
+    description: 'Xóa sản phẩm trong giỏ hàng thất bại'
+  })
+  @UseGuards(Auth)
+  @ApiBearerAuth()
+  async deleteCart(@GetUser() user : User, @Param('id') id: number){
+    return await this.productService.deleteCart(user, id)
   }
 
 }

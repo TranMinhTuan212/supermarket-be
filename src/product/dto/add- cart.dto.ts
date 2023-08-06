@@ -3,8 +3,16 @@
 import { IsNotEmpty, IsNumber, IsString } from "class-validator";
 
 
-export class CreateProductDto
+
+export class AddCartDto
 {
+    @IsNotEmpty()
+    @IsNumber()
+    quantity: number
+
+    @IsNotEmpty()
+    @IsNumber()
+    discount: number
 
     @IsNotEmpty()
     @IsString()
@@ -15,22 +23,22 @@ export class CreateProductDto
     barcode: string
 
     @IsNotEmpty()
+    @IsNumber()
+    categoryId: number
+
+    @IsNotEmpty()
     @IsString()
     description: string
 
     @IsNotEmpty()
     @IsNumber()
-    price: string
+    price: number
+
+    @IsNotEmpty()
+    @IsString()
+    image: string
 
     @IsNotEmpty()
     @IsNumber()
-    discount: string
-
-    @IsNotEmpty()
-    file: object
-
-    @IsNotEmpty()
-    @IsNumber()
-    categoryId: number
-
+    supplierId: number
 }

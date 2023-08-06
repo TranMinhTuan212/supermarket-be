@@ -92,7 +92,10 @@ export class UserService {
 
   async login(loginDto: LoginDto) {
     const user = await this.userRepositoty
-      .createQueryBuilder()
+      .createQueryBuilder('user')
+      .leftJoin('user.userRoles', 'userRole')
+      .leftJoin('userRole.role', 'role')
+      .select(['user', 'userRole', 'role'])
       .where({ email: loginDto.email })
       .getOne();
 
@@ -120,6 +123,7 @@ export class UserService {
       name: user.name,
       email: user.email,
       profileImage: user.profileImage,
+      role: user.userRoles[0].role.code
     };
     return {
       status: 200,

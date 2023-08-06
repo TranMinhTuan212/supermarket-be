@@ -9,6 +9,7 @@ import { User } from 'src/user/entities/user.entity';
 import { ROLE } from 'src/enum/role.enum';
 import { GetListProductDto } from './dto/get-list-product.dto';
 import { ApproveDto } from './dto/approve.dto';
+import { AddCartDto } from './dto/add- cart.dto';
 
 @Injectable()
 export class ProductService {
@@ -17,6 +18,7 @@ export class ProductService {
     private productRepository: ProductRepository,
   ) {}
 
+  // create product
   async createProduct(
     createProductDto: CreateProductDto,
     file: Express.Multer.File,
@@ -24,7 +26,7 @@ export class ProductService {
     user: User,
   ) {
     if (user['role'] !== ROLE.SUPPLIER) {
-      return unlink(file.destination + '/' + file.filename, (e) => {
+      return unlink(file.destination + '/' + file.filename, () => {
         return {
           status: 500,
           message: 'Bạn không có quyền hạn để thực hiện thao tác này',
@@ -55,6 +57,7 @@ export class ProductService {
     }
   }
 
+  // get list product
   async getListProduct(getListProductDto: GetListProductDto) {
     try {
       return await this.productRepository.getListProduct(getListProductDto);
@@ -67,6 +70,7 @@ export class ProductService {
     }
   }
 
+  // get product by id
   async getProductById(id: number) {
     try {
       return await this.productRepository.getProductById(id);
@@ -79,6 +83,7 @@ export class ProductService {
     }
   }
 
+  // approve product
   async approveProduct(user: User, approve: ApproveDto) {
     try {
       if (user['role'] !== ROLE.ADMIN) {
@@ -91,6 +96,54 @@ export class ProductService {
         message: 'Phê duyệt thất bại',
         data: null,
       };
+    }
+  }
+
+  // add product to cart
+  async addCart(user: User, addCartDto: AddCartDto){
+    try {
+      if (user['role'] !== ROLE.STORE) {
+        throw new UnauthorizedException('Bạn không có quyền !');
+      }
+      return await this.productRepository.addCart(user, addCartDto)
+    } catch (error) {
+      return {
+        status: 500,
+        message: 'Thêm sản phẩm vào giỏ hàng thất bại',
+        data: null
+      }
+    }
+  }
+
+  // get list product of cart
+  async getCart(user: User, getListProductDto: GetListProductDto){
+    try {
+      if (user['role'] !== ROLE.STORE) {
+        throw new UnauthorizedException('Bạn không có quyền !');
+      }
+      return await this.productRepository.getCart(user, getListProductDto)
+    } catch (error) {
+      return {
+        status: 500,
+        message: 'Lấy danh sách giỏi hàng thất bại',
+        data: null
+      }
+    }
+  }
+
+  // delete cart
+  async deleteCart(user: User, id: number){
+    try {
+      if (user['role'] !== ROLE.STORE) {
+        throw new UnauthorizedException('Bạn không có quyền !');
+      }
+      return await this.productRepository.deleteCart(user, id)
+    } catch (error) {
+      return {
+        status: 500,
+        message: 'Xóa sản phẩm trong giỏi hàng thất bại',
+        data: null
+      }
     }
   }
 }

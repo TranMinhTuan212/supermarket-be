@@ -25,6 +25,9 @@ export class Product {
   userId: number;
 
   @Column()
+  barcode: string;
+
+  @Column()
   ownType: OWN_TYPE;
 
   @Column()
@@ -62,6 +65,13 @@ export class Product {
 
   @Column()
   isDeleted: boolean;
+
+  @Column()
+  supplierId: number
+
+  @ManyToOne(() => User, user=>user.product)
+  @JoinColumn({ name: 'supplier_id', referencedColumnName: 'id' })
+  supplier: User;
 
   @OneToOne(() => Category)
   @JoinColumn()
